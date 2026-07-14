@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch",
+      "Bash"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset:*)",
+      "Bash(git clean:*)",
+      "Bash(git restore:*)",
+      "Bash(git branch -D:*)",
+      "Bash(rm:*)",
+      "Bash(rmdir:*)",
+      "Bash(git checkout -- :*)"
+    ]
+  }
+}
