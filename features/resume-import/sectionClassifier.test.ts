@@ -37,7 +37,7 @@ describe("classifyResumeLines", () => {
       line("•Developed an AI telehealth platform."),
       header("EDUCATION"),
       line(
-        "Bachelor in Software Development, Springfield State University 11/2021 – 07/2025",
+        "Bachelor in Software Development, State University 11/2021 – 07/2025",
       ),
       header("SKILLS"),
       line("Languages: JavaScript, TypeScript, Python"),
@@ -55,7 +55,7 @@ describe("classifyResumeLines", () => {
     expect(result.experience[0].company).toBe("Acme Corp");
     expect(result.education).toHaveLength(1);
     expect(result.education[0].institution).toBe(
-      "Springfield State University",
+      "State University",
     );
     expect(result.skills.map((s) => s.name)).toContain("JavaScript");
     expect(result.certifications).toEqual([
