@@ -40,4 +40,24 @@ describe("createJobDescriptionFromText", () => {
     const result = jobDescriptionSchema.safeParse(jd);
     expect(result.success).toBe(true);
   });
+
+  it("populates required/preferred skills and experience level when the text has clear signals", () => {
+    const jd = createJobDescriptionFromText(
+      [
+        "Senior Backend Engineer",
+        "Acme Corp · Remote",
+        "",
+        "Requirements:",
+        "- 5+ years with Node.js and PostgreSQL",
+        "",
+        "Nice to have:",
+        "- Docker experience",
+      ].join("\n"),
+    );
+
+    expect(jd.requiredSkills).toEqual(["Node.js", "PostgreSQL"]);
+    expect(jd.preferredSkills).toEqual(["Docker"]);
+    expect(jd.experienceLevel).toBe("5+ years");
+    expect(jd.keywords).toEqual(expect.arrayContaining(["Node.js", "PostgreSQL", "Docker"]));
+  });
 });
