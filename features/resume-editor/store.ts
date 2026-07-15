@@ -11,9 +11,9 @@ import {
   createBlankSkill,
   createBlankSourceResume,
 } from "@/features/resume-editor/blankResume";
-import { resumeDraftStorage } from "@/features/resume-editor/storage";
 import { toEditableEntry, type EditableEntry } from "@/features/resume-editor/types";
 import type { ResumeParseResult } from "@/features/resume-import/types";
+import { draftStorage } from "@/lib/storage/keyValueStorage";
 import type {
   CertificationEntry,
   ContactInfo,
@@ -237,7 +237,7 @@ export const useResumeEditorStore = create<ResumeEditorState>()(
     }),
     {
       name: "resume-tailor:editor-draft",
-      storage: createJSONStorage(() => resumeDraftStorage),
+      storage: createJSONStorage(() => draftStorage),
     },
   ),
 );

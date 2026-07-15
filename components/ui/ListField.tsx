@@ -10,7 +10,7 @@ interface ListFieldProps {
   label: string;
   values: string[];
   onCommit: (values: string[]) => void;
-  /** Defaults to newline (one item per line, e.g. bullets). Use "," for a comma-separated list (e.g. technologies). */
+  /** Defaults to newline (one item per line, e.g. bullets). Use "," for a comma-separated list (e.g. skills/technologies). */
   delimiter?: string;
   rows?: number;
 }
@@ -33,10 +33,10 @@ function textToValues(text: string, delimiter: string): string[] {
  * newly-typed blank lines (e.g. the moment a user presses Enter to start a
  * new bullet) — this avoids that.
  *
- * No effect is needed to re-sync `values` from outside: the parent entry
- * this is nested in always gets a fresh id on import/reset (see
- * blankResume.ts), so its `key` in the parent's `.map()` already forces a
- * full remount (and fresh initial state here) whenever a new resume loads.
+ * No effect is needed to re-sync `values` from an external reload: give
+ * this a `key` (or ensure its parent list item's key) that changes when
+ * the underlying record is freshly loaded, so React remounts it with a
+ * fresh initial state instead.
  */
 export function ListField({ id, label, values, onCommit, delimiter = "\n", rows = 4 }: ListFieldProps) {
   const [text, setText] = useState(() => valuesToText(values, delimiter));

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormField } from "@/components/ui/FormField";
 import { Input } from "@/components/ui/input";
-import { ListField } from "@/features/resume-editor/components/ListField";
+import { ListField } from "@/components/ui/ListField";
 import { SortableEntryCard } from "@/features/resume-editor/components/SortableEntryCard";
 import { useResumeEditorStore } from "@/features/resume-editor/store";
 import { useSortableSection } from "@/features/resume-editor/useSortableSection";

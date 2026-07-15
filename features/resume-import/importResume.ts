@@ -1,5 +1,5 @@
-import { MAX_RESUME_PAGE_COUNT } from "@/constants/files";
 import { extractDocxLines } from "@/features/resume-import/docx/extractDocxResume";
+import { describeExtractionError } from "@/features/resume-import/extractionErrorMessages";
 import { validateResumeFile } from "@/features/resume-import/fileValidation";
 import { importJsonResume } from "@/features/resume-import/json/importJsonResume";
 import { extractPdfLines } from "@/features/resume-import/pdf/extractPdfResume";
@@ -26,19 +26,6 @@ function wrapTrustedResumeAsParseResult(
     unclassifiedBlocks: resume.unclassifiedBlocks,
     warnings: [],
   };
-}
-
-function describeExtractionError(
-  code: "corrupted-file" | "too-many-pages" | "no-extractable-text",
-): string {
-  switch (code) {
-    case "corrupted-file":
-      return "The file could not be read. It may be corrupted or password-protected.";
-    case "too-many-pages":
-      return `The file has more than ${MAX_RESUME_PAGE_COUNT} pages.`;
-    case "no-extractable-text":
-      return "No extractable text was found. If this is a scanned/image-only PDF, re-export it as a text-based PDF or DOCX.";
-  }
 }
 
 /**

@@ -4,14 +4,14 @@ import type { StateStorage } from "zustand/middleware";
 
 export type SaveStatus = "idle" | "pending" | "saved";
 
-/** Tiny status store SaveStatusIndicator subscribes to; storage.ts is the only writer. */
+/** Shared status store every feature's SaveStatusIndicator subscribes to; this module is the only writer. */
 export const useSaveStatusStore = create<{ status: SaveStatus }>(() => ({
   status: "idle",
 }));
 
 const DB_NAME = "resume-tailor";
 const DB_VERSION = 1;
-const STORE_NAME = "editor-draft";
+const STORE_NAME = "drafts";
 const WRITE_DEBOUNCE_MS = 400;
 
 let dbPromise: Promise<IDBPDatabase> | null = null;
@@ -101,9 +101,12 @@ function scheduleWrite(name: string, value: string): void {
  * IndexedDB-backed storage for Zustand's `persist` middleware, with an
  * automatic localStorage fallback (private-browsing / IndexedDB errors).
  * See docs/TECH_STACK_AND_AI_ARCHITECTURE.md: "IndexedDB (preferred),
- * localStorage (fallback)".
+ * localStorage (fallback)". Shared by every feature's persisted draft
+ * store (resume editor, job description) — each uses a distinct
+ * `persist({ name })` key within the same underlying "drafts" object
+ * store, avoiding a duplicate storage adapter per feature.
  */
-export const resumeDraftStorage: StateStorage = {
+export const draftStorage: StateStorage = {
   getItem: (name) => readItem(name),
   setItem: (name, value) => {
     scheduleWrite(name, value);

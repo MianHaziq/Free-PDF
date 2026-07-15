@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
+import { SaveStatusIndicator } from "@/components/SaveStatusIndicator";
 import { CertificationsSection } from "@/features/resume-editor/components/CertificationsSection";
 import { ContactSection } from "@/features/resume-editor/components/ContactSection";
 import { EducationSection } from "@/features/resume-editor/components/EducationSection";
 import { ExperienceSection } from "@/features/resume-editor/components/ExperienceSection";
 import { ImportDropzone } from "@/features/resume-editor/components/ImportDropzone";
 import { ProjectsSection } from "@/features/resume-editor/components/ProjectsSection";
-import { SaveStatusIndicator } from "@/features/resume-editor/components/SaveStatusIndicator";
 import { SkillsSection } from "@/features/resume-editor/components/SkillsSection";
 import { SummarySection } from "@/features/resume-editor/components/SummarySection";
 import { UnclassifiedBlocksPanel } from "@/features/resume-editor/components/UnclassifiedBlocksPanel";
