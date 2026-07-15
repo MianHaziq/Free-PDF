@@ -7,6 +7,7 @@ import { useJobDescriptionStore } from "@/features/job-description/store";
 import { matchResumeToJobDescription } from "@/features/matching-engine/matchResumeToJobDescription";
 import { analyzeResume } from "@/features/resume-analyzer/analyzeResume";
 import { useResumeEditorStore } from "@/features/resume-editor/store";
+import { useHasMounted } from "@/hooks/useHasMounted";
 
 /**
  * Phase 8's matching engine surfaced live: reads both the resume draft
@@ -15,6 +16,7 @@ import { useResumeEditorStore } from "@/features/resume-editor/store";
  * requiring any extra "run match" step.
  */
 export function MatchResultPanel() {
+  const hasMounted = useHasMounted();
   const summary = useResumeEditorStore((state) => state.summary);
   const skills = useResumeEditorStore((state) => state.skills);
   const experience = useResumeEditorStore((state) => state.experience);
@@ -36,7 +38,10 @@ export function MatchResultPanel() {
     return matchResumeToJobDescription(analysis.keywords, { requiredSkills, preferredSkills });
   }, [summary, skills, experience, projects, certifications, requiredSkills, preferredSkills]);
 
-  const hasJobDescriptionSkills = requiredSkills.length > 0 || preferredSkills.length > 0;
+  // See hooks/useHasMounted.ts — SSR never has persisted store data, so
+  // this stays "false" (matching the server's render) until after hydration.
+  const hasJobDescriptionSkills =
+    hasMounted && (requiredSkills.length > 0 || preferredSkills.length > 0);
 
   return (
     <Card>

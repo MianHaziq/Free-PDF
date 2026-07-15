@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { analyzeResume } from "@/features/resume-analyzer/analyzeResume";
 import { useResumeEditorStore } from "@/features/resume-editor/store";
+import { useHasMounted } from "@/hooks/useHasMounted";
 
 /**
  * Surfaces Phase 6's resume analysis (docs/Resume_Tailoring_Platform_Development_Plan.md
@@ -13,6 +14,7 @@ import { useResumeEditorStore } from "@/features/resume-editor/store";
  * section — a quick, actionable nudge for ATS keyword coverage.
  */
 export function ResumeInsightsPanel() {
+  const hasMounted = useHasMounted();
   const summary = useResumeEditorStore((state) => state.summary);
   const skills = useResumeEditorStore((state) => state.skills);
   const experience = useResumeEditorStore((state) => state.experience);
@@ -35,6 +37,10 @@ export function ResumeInsightsPanel() {
   const undeclaredTechnologies = analysis.technologies.filter(
     (tech) => !skillNamesLower.has(tech.toLowerCase()),
   );
+
+  // See hooks/useHasMounted.ts — SSR never has persisted store data, so
+  // these stats would otherwise flash from 0 to their real value post-hydration.
+  if (!hasMounted) return null;
 
   return (
     <Card>

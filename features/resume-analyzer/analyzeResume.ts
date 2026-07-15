@@ -3,6 +3,7 @@ import {
   calculateTotalExperienceMonths,
   monthsToYears,
 } from "@/features/resume-analyzer/experienceDuration";
+import { dedupeCaseInsensitive } from "@/lib/dedupe";
 import { extractKnownTermMentions } from "@/lib/keywordExtraction";
 import type { SourceResume } from "@/types/resume";
 
@@ -38,18 +39,6 @@ function collectFreeText(resume: AnalyzableResume): string {
   }
 
   return parts.filter(Boolean).join("\n");
-}
-
-function dedupeCaseInsensitive(values: string[]): string[] {
-  const seen = new Set<string>();
-  const result: string[] = [];
-  for (const value of values) {
-    const key = value.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    result.push(value);
-  }
-  return result;
 }
 
 /**

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useJobDescriptionStore } from "@/features/job-description/store";
 import { useResumeEditorStore } from "@/features/resume-editor/store";
 import { tailorResume } from "@/features/tailoring-engine/tailorResume";
+import { useHasMounted } from "@/hooks/useHasMounted";
 
 /**
  * Phase 9's tailoring engine surfaced live, appended to the match page:
@@ -15,6 +16,7 @@ import { tailorResume } from "@/features/tailoring-engine/tailorResume";
  * layout is Phase 11's job — this just proves the tailoring itself.
  */
 export function TailoredResumePreview() {
+  const hasMounted = useHasMounted();
   const resumeState = useResumeEditorStore((state) => state);
   const jobDescriptionState = useJobDescriptionStore((state) => state);
 
@@ -26,7 +28,8 @@ export function TailoredResumePreview() {
   const hasJobDescriptionSkills =
     jobDescriptionState.requiredSkills.length > 0 || jobDescriptionState.preferredSkills.length > 0;
 
-  if (!hasJobDescriptionSkills) return null;
+  // See hooks/useHasMounted.ts — avoids a hydration mismatch since SSR never has persisted store data.
+  if (!hasMounted || !hasJobDescriptionSkills) return null;
 
   return (
     <Card>

@@ -34,7 +34,14 @@ test("resume/job description match score, matched and missing skills", async ({ 
   await expect(page.getByText(/Matched required:.*React/)).toBeVisible();
   await expect(page.getByText(/Missing required:.*Kubernetes/)).toBeVisible();
   // No preferred skills listed, so the score is required-only: 1 of 2 matched = 50%.
-  await expect(page.getByText("50%")).toBeVisible();
+  // Shown by both the match panel and the ATS report panel.
+  await expect(page.getByText("50%")).toHaveCount(2);
+
+  await expect(page.getByText("ATS Report", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Missing required skills: Kubernetes.", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("No professional summary provided.")).toBeVisible();
 });
 
 test("match page prompts to add job description skills when none are set", async ({ page }) => {
