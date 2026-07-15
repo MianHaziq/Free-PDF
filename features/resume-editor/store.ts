@@ -60,6 +60,7 @@ function draftFromSourceResume(resume: SourceResume): ResumeEditorDraft {
 
 interface ResumeEditorActions {
   loadFromParseResult: (result: ResumeParseResult, label?: string) => void;
+  loadFromSourceResume: (resume: SourceResume) => void;
   resetToBlank: () => void;
 
   setContact: (contact: ContactInfo) => void;
@@ -121,6 +122,10 @@ export const useResumeEditorStore = create<ResumeEditorState>()(
             unclassifiedBlocks: result.unclassifiedBlocks,
           }),
         });
+      },
+
+      loadFromSourceResume: (resume) => {
+        set(draftFromSourceResume(resume));
       },
 
       resetToBlank: () => {

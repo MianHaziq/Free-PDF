@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { AtsReportPanel } from "@/features/ats-report/components/AtsReportPanel";
+import { SaveTailoredResumeButton } from "@/features/history/components/SaveTailoredResumeButton";
 import { MatchResultPanel } from "@/features/matching-engine/components/MatchResultPanel";
 import { TailoredResumePreview } from "@/features/tailoring-engine/components/TailoredResumePreview";
 
@@ -13,7 +14,10 @@ export const metadata: Metadata = {
 export default function MatchPage() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-6 py-10">
-      <h1 className="text-2xl font-bold tracking-tight">Resume ↔ Job Match</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold tracking-tight">Resume ↔ Job Match</h1>
+        <SaveTailoredResumeButton />
+      </div>
       <MatchResultPanel />
       <AtsReportPanel />
       <TailoredResumePreview />

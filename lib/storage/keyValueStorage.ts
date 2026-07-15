@@ -1,6 +1,7 @@
-import { openDB, type IDBPDatabase } from "idb";
 import { create } from "zustand";
 import type { StateStorage } from "zustand/middleware";
+
+import { DRAFTS_STORE, getDb, isIndexedDbAvailable } from "@/lib/storage/db";
 
 export type SaveStatus = "idle" | "pending" | "saved";
 
@@ -9,29 +10,8 @@ export const useSaveStatusStore = create<{ status: SaveStatus }>(() => ({
   status: "idle",
 }));
 
-const DB_NAME = "resume-tailor";
-const DB_VERSION = 1;
-const STORE_NAME = "drafts";
+const STORE_NAME = DRAFTS_STORE;
 const WRITE_DEBOUNCE_MS = 400;
-
-let dbPromise: Promise<IDBPDatabase> | null = null;
-
-function getDb(): Promise<IDBPDatabase> {
-  if (!dbPromise) {
-    dbPromise = openDB(DB_NAME, DB_VERSION, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME);
-        }
-      },
-    });
-  }
-  return dbPromise;
-}
-
-function isIndexedDbAvailable(): boolean {
-  return typeof indexedDB !== "undefined";
-}
 
 function getLocalStorage(): Storage | null {
   return typeof localStorage !== "undefined" ? localStorage : null;

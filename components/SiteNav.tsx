@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { href: "/job-description", label: "Job Description" },
   { href: "/match", label: "Match" },
   { href: "/preview", label: "Preview" },
+  { href: "/history", label: "History" },
 ];
 
 /** Minimal top-level nav — no active-link state needed yet, so this stays a server component. Hidden entirely when printing (e.g. the resume preview page), never something you'd want on a printed page. */

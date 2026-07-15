@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { SaveStatusIndicator } from "@/components/SaveStatusIndicator";
+import { SaveResumeButton } from "@/features/history/components/SaveResumeButton";
 import { CertificationsSection } from "@/features/resume-editor/components/CertificationsSection";
 import { ContactSection } from "@/features/resume-editor/components/ContactSection";
 import { EducationSection } from "@/features/resume-editor/components/EducationSection";
@@ -23,7 +24,10 @@ export default function EditorPage() {
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-6 py-10">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight">Resume Editor</h1>
-        <SaveStatusIndicator />
+        <div className="flex items-center gap-3">
+          <SaveStatusIndicator />
+          <SaveResumeButton />
+        </div>
       </div>
       <ImportDropzone />
       <UnclassifiedBlocksPanel />

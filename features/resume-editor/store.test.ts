@@ -53,6 +53,41 @@ describe("resume editor store", () => {
     expect(state.education[0].data.institution).toBe("State U");
   });
 
+  it("loadFromSourceResume replaces the draft with a saved history record", () => {
+    const resume = {
+      id: "resume-1",
+      label: "Saved Resume",
+      createdAt: "2026-01-01T00:00:00.000Z",
+      updatedAt: "2026-01-01T00:00:00.000Z",
+      sourceFormat: "json" as const,
+      contact: {
+        fullName: "Jane Doe",
+        email: "jane@example.com",
+        phone: null,
+        location: null,
+        linkedin: null,
+        github: null,
+        website: null,
+      },
+      summary: "Backend engineer.",
+      skills: [{ name: "React", category: null, confidence: "high" as const }],
+      experience: [],
+      projects: [],
+      education: [],
+      certifications: [],
+      unclassifiedBlocks: [],
+    };
+
+    useResumeEditorStore.getState().loadFromSourceResume(resume);
+    const state = useResumeEditorStore.getState();
+
+    expect(state.id).toBe("resume-1");
+    expect(state.label).toBe("Saved Resume");
+    expect(state.contact.fullName).toBe("Jane Doe");
+    expect(state.skills[0].data.name).toBe("React");
+    expect(state.toSourceResume()).toEqual(resume);
+  });
+
   it("setContact and setSummary update the draft", () => {
     const contact = {
       fullName: "Jane Doe",
