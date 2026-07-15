@@ -119,3 +119,25 @@ test("importing a JSON resume populates the editor end to end", async ({ page })
   await expect(page.getByLabel("Professional summary")).toHaveValue("Imported summary.");
   await expect(page.getByLabel("Skill name").nth(0)).toHaveValue("Go");
 });
+
+test("resume insights update live and flag undeclared technologies", async ({ page }) => {
+  await page.goto("/editor");
+  await page.getByRole("button", { name: "Start blank resume" }).click();
+
+  await page.getByRole("button", { name: "Add skill" }).click();
+  await page.getByLabel("Skill name").fill("React");
+  await page.getByLabel("Skill name").blur();
+
+  await page.getByRole("button", { name: "Add experience" }).click();
+  await page.getByLabel("Company").fill("Acme");
+  await page.getByLabel("Start date (YYYY-MM)").fill("2022-01");
+  await page.getByLabel("End date (YYYY-MM, blank = current)").fill("2022-12");
+  await page.getByLabel("Bullets (one per line)").fill("Built a service using Docker.");
+  await page.getByLabel("Bullets (one per line)").blur();
+
+  // Numeric correctness is covered by analyzeResume's unit tests; this just
+  // confirms the panel renders live and reacts to real UI edits.
+  await expect(page.getByText("Years of experience")).toBeVisible();
+  await expect(page.getByText(/Mentioned in your bullets but not listed as skills/)).toBeVisible();
+  await expect(page.getByText("Docker", { exact: true })).toBeVisible();
+});

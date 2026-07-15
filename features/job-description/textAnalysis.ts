@@ -1,4 +1,5 @@
 import { KNOWN_TECH_SKILLS } from "@/constants/techSkills";
+import { extractKnownTermMentions } from "@/lib/keywordExtraction";
 
 const COMPANY_LABEL_REGEX = /^company\s*:\s*(.+)$/i;
 const HEADER_LINE_SEPARATORS = ["·", "•", "|", " - ", " – ", " — "];
@@ -46,10 +47,6 @@ export function extractTitleAndCompany(rawText: string): {
   return { title, company: null };
 }
 
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
 /**
  * Scans text for recognizable tech skills/technologies (constants/techSkills.ts),
  * returning canonical names in first-appearance order, deduplicated.
@@ -58,29 +55,5 @@ function escapeRegExp(value: string): string {
  * undifferentiated first pass.
  */
 export function extractKeywords(rawText: string): string[] {
-  const matches: { skill: string; index: number }[] = [];
-
-  for (const skill of KNOWN_TECH_SKILLS) {
-    const pattern = new RegExp(
-      `(?<![A-Za-z0-9_])${escapeRegExp(skill)}(?![A-Za-z0-9_])`,
-      "i",
-    );
-    const match = pattern.exec(rawText);
-    if (match) {
-      matches.push({ skill, index: match.index });
-    }
-  }
-
-  matches.sort((a, b) => a.index - b.index);
-
-  const seen = new Set<string>();
-  const found: string[] = [];
-  for (const { skill } of matches) {
-    const key = skill.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    found.push(skill);
-  }
-
-  return found;
+  return extractKnownTermMentions(rawText, KNOWN_TECH_SKILLS);
 }

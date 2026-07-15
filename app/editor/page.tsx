@@ -7,6 +7,7 @@ import { EducationSection } from "@/features/resume-editor/components/EducationS
 import { ExperienceSection } from "@/features/resume-editor/components/ExperienceSection";
 import { ImportDropzone } from "@/features/resume-editor/components/ImportDropzone";
 import { ProjectsSection } from "@/features/resume-editor/components/ProjectsSection";
+import { ResumeInsightsPanel } from "@/features/resume-editor/components/ResumeInsightsPanel";
 import { SkillsSection } from "@/features/resume-editor/components/SkillsSection";
 import { SummarySection } from "@/features/resume-editor/components/SummarySection";
 import { UnclassifiedBlocksPanel } from "@/features/resume-editor/components/UnclassifiedBlocksPanel";
@@ -26,6 +27,7 @@ export default function EditorPage() {
       </div>
       <ImportDropzone />
       <UnclassifiedBlocksPanel />
+      <ResumeInsightsPanel />
       <ContactSection />
       <SummarySection />
       <SkillsSection />
