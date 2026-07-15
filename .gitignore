@@ -27,7 +27,6 @@ yarn-error.log*
 
 # local env files
 .env*.local
-.env
 
 # real personal resume/JD fixtures (contains PII - name/contact info)
 /test-resumes/
@@ -38,3 +37,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# vendored from pdfjs-dist by scripts/copy-pdf-worker.mjs (postinstall) — regenerated, not committed
+/public/pdf.worker.min.mjs
+config.bat

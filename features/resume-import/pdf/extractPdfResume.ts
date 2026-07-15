@@ -1,4 +1,4 @@
-import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf.mjs";
 
 import { MAX_RESUME_PAGE_COUNT } from "@/constants/files";
 import {
@@ -7,6 +7,13 @@ import {
   type PdfTextItemInput,
 } from "@/features/resume-import/pdf/buildPdfLines";
 import type { ResumeLine } from "@/features/resume-import/types";
+
+// pdfjs-dist (v6+) always parses on a worker thread and throws if this isn't
+// set — there's no "workerless" mode anymore. The file is vendored into
+// public/ from node_modules by scripts/copy-pdf-worker.mjs (postinstall).
+// Every vitest suite that imports this module mocks it via vi.mock(), so
+// this module-scope assignment only ever actually runs in the browser.
+GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
 export interface PdfExtractionResult {
   lines: ResumeLine[];
