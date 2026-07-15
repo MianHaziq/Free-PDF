@@ -3,15 +3,16 @@
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useJobDescriptionStore } from "@/features/job-description/store";
+import { ExportButtons } from "@/features/resume-export/components/ExportButtons";
 import { buildPreviewData } from "@/features/resume-preview/buildPreviewData";
 import { ClassicTemplate } from "@/features/resume-preview/components/ClassicTemplate";
 import { ModernTemplate } from "@/features/resume-preview/components/ModernTemplate";
-import { useJobDescriptionStore } from "@/features/job-description/store";
+import type { TemplateId } from "@/features/resume-preview/types";
 import { useResumeEditorStore } from "@/features/resume-editor/store";
 import { tailorResume } from "@/features/tailoring-engine/tailorResume";
 import { useHasMounted } from "@/hooks/useHasMounted";
 
-type TemplateId = "classic" | "modern";
 type SourceMode = "current" | "tailored";
 
 const TEMPLATES: { id: TemplateId; label: string }[] = [
@@ -89,6 +90,7 @@ export function ResumePreview() {
         <Button type="button" size="sm" variant="outline" onClick={() => window.print()}>
           Print / Save as PDF
         </Button>
+        <ExportButtons data={previewData} templateId={templateId} />
       </div>
       <TemplateComponent data={previewData} />
     </div>

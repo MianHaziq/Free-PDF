@@ -24,3 +24,6 @@ export interface PreviewResumeData {
   education: EducationEntry[];
   certifications: CertificationEntry[];
 }
+
+/** Shared by the preview (HTML) and export (PDF) template pickers. */
+export type TemplateId = "classic" | "modern";
