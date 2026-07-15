@@ -1,6 +1,7 @@
 "use client"; // loads + mutates the IndexedDB-backed history store
 
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +26,7 @@ function formatDate(iso: string): string {
  */
 export function HistoryPanel() {
   const hasMounted = useHasMounted();
+  const isLoaded = useHistoryStore((state) => state.isLoaded);
   const sourceResumes = useHistoryStore((state) => state.sourceResumes);
   const jobDescriptions = useHistoryStore((state) => state.jobDescriptions);
   const tailoredResumes = useHistoryStore((state) => state.tailoredResumes);
@@ -45,22 +47,47 @@ export function HistoryPanel() {
 
   async function handleDeleteSourceResume(id: string) {
     const result = await deleteSourceResume(id);
-    if (!result.deleted) {
-      const confirmed = window.confirm(
-        `This resume has ${result.dependentCount} tailored version(s) saved against it. Delete those too?`,
-      );
-      if (confirmed) await deleteSourceResume(id, true);
+    if (result.deleted) {
+      toast.success("Resume deleted");
+      return;
+    }
+    const confirmed = window.confirm(
+      `This resume has ${result.dependentCount} tailored version(s) saved against it. Delete those too?`,
+    );
+    if (confirmed) {
+      await deleteSourceResume(id, true);
+      toast.success("Resume and its tailored versions deleted");
     }
   }
 
   async function handleDeleteJobDescription(id: string) {
     const result = await deleteJobDescription(id);
-    if (!result.deleted) {
-      const confirmed = window.confirm(
-        `This job description has ${result.dependentCount} tailored resume(s) saved against it. Delete those too?`,
-      );
-      if (confirmed) await deleteJobDescription(id, true);
+    if (result.deleted) {
+      toast.success("Job description deleted");
+      return;
     }
+    const confirmed = window.confirm(
+      `This job description has ${result.dependentCount} tailored resume(s) saved against it. Delete those too?`,
+    );
+    if (confirmed) {
+      await deleteJobDescription(id, true);
+      toast.success("Job description and its tailored resumes deleted");
+    }
+  }
+
+  async function handleDeleteTailoredResume(id: string) {
+    await deleteTailoredResume(id);
+    toast.success("Tailored resume deleted");
+  }
+
+  // Server-rendered HTML never has persisted data, and the first client
+  // paint is pre-refresh — show a loading state until IndexedDB has been read.
+  if (!isLoaded) {
+    return (
+      <p className="text-sm text-muted-foreground" role="status">
+        Loading your saved history…
+      </p>
+    );
   }
 
   return (
@@ -85,7 +112,15 @@ export function HistoryPanel() {
                   <p className="text-sm text-muted-foreground">Updated {formatDate(resume.updatedAt)}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button type="button" size="sm" variant="outline" onClick={() => loadFromSourceResume(resume)}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      loadFromSourceResume(resume);
+                      toast.success("Resume loaded into the editor");
+                    }}
+                  >
                     Load into editor
                   </Button>
                   <Button
@@ -127,7 +162,15 @@ export function HistoryPanel() {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Button type="button" size="sm" variant="outline" onClick={() => loadJobDescription(jobDescription)}>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      loadJobDescription(jobDescription);
+                      toast.success("Job description loaded");
+                    }}
+                  >
                     Load
                   </Button>
                   <Button
@@ -177,7 +220,7 @@ export function HistoryPanel() {
                     type="button"
                     size="sm"
                     variant="destructive"
-                    onClick={() => void deleteTailoredResume(tailored.id)}
+                    onClick={() => void handleDeleteTailoredResume(tailored.id)}
                   >
                     Delete
                   </Button>

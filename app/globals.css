@@ -4,23 +4,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Only fonts live here. Light/dark colors are driven by the oklch tokens
+ * in :root / .dark below (mapped through `@theme inline`), and next-themes
+ * toggles the `.dark` class — so a hardcoded prefers-color-scheme block
+ * here would just fight the class strategy and never actually win.
+ */
 @theme {
-  --color-background: #ffffff;
-  --color-foreground: #171717;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-background: #0a0a0a;
-    --color-foreground: #ededed;
-  }
-}
-
-body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
 }
 
 @theme inline {

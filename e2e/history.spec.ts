@@ -30,7 +30,8 @@ test("saves resume, job description, and a tailored resume to history, and they 
   await page.goto("/match");
   await expect(page.getByText("100%").first()).toBeVisible();
   await page.getByRole("button", { name: "Save to History" }).click();
-  await expect(page.getByText("Saved").first()).toBeVisible({ timeout: 5000 });
+  // The save button now reports success via a toast rather than inline text.
+  await expect(page.getByText("Tailored resume saved to history")).toBeVisible({ timeout: 5000 });
 
   await page.goto("/history");
   await expect(page.getByText("Untitled Resume", { exact: true })).toBeVisible();
@@ -70,7 +71,8 @@ test("deleting a saved resume with a dependent tailored resume requires cascade 
 
   await page.goto("/match");
   await page.getByRole("button", { name: "Save to History" }).click();
-  await expect(page.getByText("Saved").first()).toBeVisible({ timeout: 5000 });
+  // The save button now reports success via a toast rather than inline text.
+  await expect(page.getByText("Tailored resume saved to history")).toBeVisible({ timeout: 5000 });
 
   await page.goto("/history");
 
