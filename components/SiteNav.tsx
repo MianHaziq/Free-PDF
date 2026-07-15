@@ -4,6 +4,7 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/editor", label: "Resume Editor" },
   { href: "/job-description", label: "Job Description" },
+  { href: "/match", label: "Match" },
 ];
 
 /** Minimal top-level nav — no active-link state needed yet, so this stays a server component. */
